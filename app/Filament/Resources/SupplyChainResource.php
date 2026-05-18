@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\SupplyChainResource\Pages;
+use App\Filament\Resources\SupplyChainResource\RelationManagers;
+use App\Models\SupplyChain;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class SupplyChainResource extends Resource
+{
+    protected static ?string $model = SupplyChain::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Master Data';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('nama')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('deskripsi')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('kategori')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('supplier')
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('harga')
+                    ->numeric()
+                    ->required(),
+                Forms\Components\TextInput::make('stok')
+                    ->integer()
+                    ->required(),
+                Forms\Components\TextInput::make('keterangan')
+                    ->maxLength(255),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('nama')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('deskripsi')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('kategori')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('supplier')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('harga')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('stok')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('keterangan')->sortable()->searchable(),
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+   Tables\Actions\DeleteAction::make(),
+
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListSupplyChains::route('/'),
+            'create' => Pages\CreateSupplyChain::route('/create'),
+            'edit' => Pages\EditSupplyChain::route('/{record}/edit'),
+        ];
+    }
+}

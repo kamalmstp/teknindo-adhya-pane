@@ -23,6 +23,7 @@ class BookResource extends Resource implements HasShieldPermissions
     protected static ?string $model = Book::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
+    protected static ?string $navigationGroup = 'Master Data';
 
     public static function getPermissionPrefixes(): array
     {

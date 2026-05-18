@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Karyawan extends Model
+class Unit extends Model
 {
     //
 
     // add fillable
-    protected $fillable = ['name', 'email', 'jabatan', 'nik', 'alamat', 'no_telepon', 'agama'];
+    protected $fillable = ['name', 'description'];
     // add guaded
     protected $guarded = ['id'];
     // add hidden

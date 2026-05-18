@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GudangResource\Pages;
-use App\Filament\Resources\GudangResource\RelationManagers;
-use App\Models\Gudang;
+use App\Filament\Resources\UnitResource\Pages;
+use App\Filament\Resources\UnitResource\RelationManagers;
+use App\Models\Unit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class GudangResource extends Resource
+class UnitResource extends Resource
 {
-    protected static ?string $model = Gudang::class;
+    protected static ?string $model = Unit::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Master Data';
@@ -24,8 +24,17 @@ class GudangResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nama_barang')
+                Forms\Components\TextInput::make('kode_unit')
                     ->required()
+                    ->maxLength(255),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'aktif' => 'Aktif',
+                        'nonaktif' => 'Nonaktif',
+                    ])
+                    ->default('aktif')
+                    ->required(),
+                Forms\Components\TextInput::make('keterangan')
                     ->maxLength(255),
             ]);
     }
@@ -34,13 +43,16 @@ class GudangResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('kode_unit')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('status')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('keterangan')->sortable()->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
    Tables\Actions\DeleteAction::make(),
 
             ])
@@ -51,19 +63,10 @@ class GudangResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGudangs::route('/'),
-            'create' => Pages\CreateGudang::route('/create'),
-            'edit' => Pages\EditGudang::route('/{record}/edit'),
+            'index' => Pages\ManageUnits::route('/'),
         ];
     }
 }
